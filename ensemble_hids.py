@@ -29,7 +29,7 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 # %matplotlib inline
 
-all_train_files = glob.glob('/content/drive/My Drive/ADFA-LD/Training_Data_Master/*.txt')
+all_train_files = glob.glob('.../ADFA-LD/Training_Data_Master/*.txt')
 
 train_list = []
 for file in all_train_files:
@@ -43,9 +43,9 @@ df_train = pd.DataFrame(train_list)
 df_train['label'] = 0
 df_train.columns = ['syscalls', 'label']
 
-df_train.to_csv("/content/drive/My Drive/ADFA-LD/normal_train.csv")
+df_train.to_csv(".../normal_train.csv")
 
-all_valid_files = glob.glob('/content/drive/My Drive/ADFA-LD/Validation_Data_Master/*.txt')
+all_valid_files = glob.glob('.../ADFA-LD/Validation_Data_Master/*.txt')
 
 valid_list = []
 for file in all_valid_files:
@@ -59,11 +59,11 @@ df_valid = pd.DataFrame(valid_list)
 df_valid['label'] = 0
 df_valid.columns = ['syscalls', 'label']
 
-df_valid.to_csv("/content/drive/My Drive/ADFA-LD/normal_test.csv")
+df_valid.to_csv(".../normal_test.csv")
 
 print("adduser files reading...")
 for i in range(1,11):
-  files = glob.glob('/content/drive/My Drive/ADFA-LD/Attack_Data_Master/Adduser_' + str(i) + '/*.txt')
+  files = glob.glob('.../ADFA-LD/Attack_Data_Master/Adduser_' + str(i) + '/*.txt')
 
 attack_list = []
 for file in files:
@@ -79,7 +79,7 @@ df_adduser['label']=1
 print("hydra-ftp files reading...")
 
 for i in range(1,11):
-  files = glob.glob('/content/drive/My Drive/ADFA-LD/Attack_Data_Master/Hydra_FTP_' + str(i) + '/*.txt')
+  files = glob.glob('.../ADFA-LD/Attack_Data_Master/Hydra_FTP_' + str(i) + '/*.txt')
 
 attack_list = []
 for file in files:
@@ -95,7 +95,7 @@ df_hydraftp['label']=2
 print("hydra-ssh files reading...")
 
 for i in range(1,11):
-  files = glob.glob('/content/drive/My Drive/ADFA-LD/Attack_Data_Master/Hydra_SH_' + str(i) + '/*.txt')
+  files = glob.glob('.../ADFA-LD/Attack_Data_Master/Hydra_SH_' + str(i) + '/*.txt')
 
 attack_list = []
 for file in files:
@@ -111,7 +111,7 @@ df_hydrassh['label']=3
 print("java meterpreter files reading...")
 
 for i in range(1,11):
-  files = glob.glob('/content/drive/My Drive/ADFA-LD/Attack_Data_Master/Java_Meterpreter_' + str(i) + '/*.txt')
+  files = glob.glob('.../ADFA-LD/Attack_Data_Master/Java_Meterpreter_' + str(i) + '/*.txt')
 
 attack_list = []
 for file in files:
@@ -127,7 +127,7 @@ df_javamtrptr['label']=4
 print("meterpreter files reading...")
 
 for i in range(1,11):
-  files = glob.glob('/content/drive/My Drive/ADFA-LD/Attack_Data_Master/Meterpreter_' + str(i) + '/*.txt')
+  files = glob.glob('.../ADFA-LD/Attack_Data_Master/Meterpreter_' + str(i) + '/*.txt')
 
 attack_list = []
 for file in files:
@@ -143,7 +143,7 @@ df_mtrptr['label']=5
 print("web-shell files reading...")
 
 for i in range(1,11):
-  files = glob.glob('/content/drive/My Drive/ADFA-LD/Attack_Data_Master/Webshell_' + str(i) + '/*.txt')
+  files = glob.glob('.../ADFA-LD/Attack_Data_Master/Webshell_' + str(i) + '/*.txt')
 
 attack_list = []
 for file in files:
@@ -160,15 +160,15 @@ df_attack = pd.concat([df_adduser, df_hydraftp, df_hydrassh,df_javamtrptr, df_mt
 df_attack.columns = ['syscalls', 'label'] 
 df_attack = df_attack.sample(frac=1).reset_index(drop=True)
 
-df_attack.to_csv('/content/drive/My Drive/ADFA-LD/attack_data.csv')
+df_attack.to_csv('.../attack_data.csv')
 
 """
 # **Binary Classification**
 """
 
-df_train = pd.read_csv('/content/drive/My Drive/ADFA-LD/normal_train.csv', index_col=0)
-df_valid = pd.read_csv('/content/drive/My Drive/ADFA-LD/normal_test.csv', index_col=0)
-df_attack = pd.read_csv('/content/drive/My Drive/ADFA-LD/attack_data.csv', index_col=0)
+df_train = pd.read_csv('.../normal_train.csv', index_col=0)
+df_valid = pd.read_csv('.../normal_test.csv', index_col=0)
+df_attack = pd.read_csv('.../attack_data.csv', index_col=0)
 df_attack['label']=1
 
 df = pd.concat([df_train, df_valid, df_attack], ignore_index=True)
@@ -186,12 +186,12 @@ for line in lines:
 model = gensim.models.Word2Vec(sentences=syscall_lines, size=200, window=5, workers=4, min_count=1)
 words = list(model.wv.vocab)
 
-filename = '/content/drive/My Drive/ADFA-LD/embedding_word2vec_200.txt'
+filename = '.../embedding_word2vec_200.txt'
 model.wv.save_word2vec_format(filename, binary=False)
 
 import os
 embedding_index = {}
-f =open(os.path.join('', '/content/drive/My Drive/ADFA-LD/embedding_word2vec_200.txt'), encoding='utf-8')
+f =open(os.path.join('', '.../embedding_word2vec_200.txt'), encoding='utf-8')
 for line in f:
   values = line.split()
   word = values[0]
@@ -334,6 +334,7 @@ def plot_graphs(history, string):
   plt.savefig(string+'.png', bbox_inches='tight')
   plt.show()
    
+#plot validation curves 
 plot_graphs(history, "accuracy")
 plot_graphs(history, "loss")
 
@@ -485,7 +486,8 @@ def plot_graphs(history, string):
   plt.savefig(string+'.eps', bbox_inches='tight')
   plt.savefig(string+'.png', bbox_inches='tight')
   plt.show()
-   
+
+#plot validation curves                
 plot_graphs(history, "accuracy")
 plot_graphs(history, "loss")
 
