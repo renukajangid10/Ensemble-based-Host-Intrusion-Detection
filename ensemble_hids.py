@@ -1,9 +1,4 @@
-
-from google.colab import drive
-drive.mount('/content/drive', force_remount=True)
-
 # import libraries
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
