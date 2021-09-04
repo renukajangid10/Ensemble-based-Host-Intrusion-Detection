@@ -8,6 +8,7 @@ from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from nltk.tokenize import word_tokenize
 import gensim
+from itertools import zip_longest
 
 from sklearn.preprocessing import LabelEncoder
 from keras.models import Sequential
@@ -186,13 +187,23 @@ model.wv.save_word2vec_format(filename, binary=False)
 
 import os
 embedding_index = {}
+system_call = []
+embedding = []
 f =open(os.path.join('', '.../embedding_word2vec_200.txt'), encoding='utf-8')
 for line in f:
   values = line.split()
   word = values[0]
   coefs = np.asarray(values[1:])
   embedding_index[word] = coefs
+  system_call.append(word)
+  embedding.append(values[1:])
 f.close()
+
+#converting embedding file to csv
+embedding.pop(0)
+system_call.pop(0)
+df_embedding = pd.DataFrame.from_records(zip_longest(system_call, embedding), columns=['System Call', 'Embedding'])
+df_embedding.to_csv('.../embedding_200.csv', index=False)
 
 #convert tokens to corresponding integer index
 tokenizer_obj = Tokenizer()
