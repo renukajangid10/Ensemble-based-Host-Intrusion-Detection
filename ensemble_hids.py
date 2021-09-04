@@ -339,7 +339,7 @@ Y_pred = [float(np.round(x)) for x in Y_predicted]
 
 print(classification_report(testy_ens, Y_pred))
 
-cm = confusion_matrix(testy_ens, classes)
+cm = confusion_matrix(testy_ens, Y_pred)
 precision=cm[1][1]/(cm[1][1]+cm[0][1])
 recall=cm[1][1]/(cm[1][1]+cm[1][0])
 fscore=(2*prc*rcl)/(prc+rcl)
