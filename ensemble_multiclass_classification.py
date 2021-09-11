@@ -9,6 +9,57 @@ df_attack = pd.read_csv('/content/drive/My Drive/ADFA-LD/attack_data.csv', index
 df = pd.concat([df_train, df_valid, df_attack], ignore_index=True)
 df = df.sample(frac=1).reset_index(drop=True)
 
+lines = df['syscalls'].values.tolist()
+syscall_lines = []
+
+#tokenizing the traces
+for line in lines:
+  tokens = word_tokenize(line)
+  syscall_lines.append(tokens)
+
+#train word2vec
+model = gensim.models.Word2Vec(sentences=syscall_lines, size=200, window=5, workers=4, min_count=1)
+words = list(model.wv.vocab)
+
+filename = '.../embedding_word2vec_200.txt'
+model.wv.save_word2vec_format(filename, binary=False)
+
+import os
+embedding_index = {}
+system_call = []
+embedding = []
+f =open(os.path.join('', '.../embedding_word2vec_200.txt'), encoding='utf-8')
+for line in f:
+  values = line.split()
+  word = values[0]
+  coefs = np.asarray(values[1:])
+  embedding_index[word] = coefs
+  system_call.append(word)
+  embedding.append(values[1:])
+f.close()
+
+#converting embedding file to csv
+embedding.pop(0)
+system_call.pop(0)
+df_embedding = pd.DataFrame.from_records(zip_longest(system_call, embedding), columns=['System Call', 'Embedding'])
+df_embedding.to_csv('.../embedding_200.csv', index=False)
+
+#convert tokens to corresponding integer index
+tokenizer_obj = Tokenizer()
+tokenizer_obj.fit_on_texts(syscall_lines)
+sequences = tokenizer_obj.texts_to_sequences(syscall_lines)
+word_index = tokenizer_obj.word_index
+
+#create an embedding matrix containing embedding for each unique token 
+num_words = len(word_index)+1
+embedding_matrix = np.zeros((num_words, 200))
+for word, i in word_index.items():
+  if i>num_words:
+    continue
+  embedding_vector = embedding_index.get(word)
+  if embedding_vector is not None:
+    embedding_matrix[i]= embedding_vector
+
 #padding system calls traces to fixed length
 syscall_pad = pad_sequences(sequences, maxlen = 400)
 label = df['label'].values
