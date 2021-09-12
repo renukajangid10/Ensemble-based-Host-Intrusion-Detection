@@ -167,7 +167,7 @@ for train, test in kfold.split(X, Y):
   test_x = X[test].reshape(-1, 1, 4)
   train_y = Y[train].reshape(-1, 1, 1)
   model_meta = Sequential()
-\  model_meta.add(LSTM(2, input_shape=(1,4)))
+  model_meta.add(LSTM(2, input_shape=(1,4)))
   model_meta.add(Dense(1, activation='sigmoid'))
   model_meta.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
   print(model_meta.summary())
