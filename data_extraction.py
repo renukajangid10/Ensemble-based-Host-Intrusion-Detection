@@ -4,25 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import glob
 
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
-from nltk.tokenize import word_tokenize
-import gensim
-from itertools import zip_longest
-
-from sklearn.preprocessing import LabelEncoder
-from keras.models import Sequential
-from keras.layers import LSTM, Dense, Dropout, Input, Embedding, Bidirectional, GRU, Activation
-from keras.utils import to_categorical
-from keras.optimizers import Adam
-from keras.callbacks import EarlyStopping
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import classification_report
-from keras.regularizers import l2
-from keras.initializers import Constant
-import time
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
 # %matplotlib inline
 
 all_train_files = glob.glob('.../ADFA-LD/Training_Data_Master/*.txt')
